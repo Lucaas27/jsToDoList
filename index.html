@@ -23,9 +23,14 @@
         </header>
         <main>
             <form>
-                <input type="text">
-                <button></button>
+                <input type="text" class="todo-input" aria-label="todo-input">
+                <button class="todo-button" type="submit" aria-label="add-task">
+                    <i class="fa-solid fa-circle-plus"></i>
+                </button>
             </form>
+            <article class="todo-container">
+                <ul class="todo-list"></ul>
+            </article>
         </main>
         <footer>
             <script src="./app.js"></script>
