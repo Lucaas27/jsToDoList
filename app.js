@@ -3,10 +3,12 @@ const todoBtn = document.querySelector('.todo-button');
 const todoInput = document.querySelector('.todo-input');
 const todoList = document.querySelector('.todo-list');
 const msg = document.getElementById("todo-msg");
+const todoFilter = document.querySelector('.todo-filter');
 
 //Event Listeners
 todoBtn.addEventListener('click', addTodo);
 todoList.addEventListener('click', changeState);
+todoFilter.addEventListener('click', filterList);
 
 
 //Functions
@@ -56,4 +58,31 @@ function changeState(e) {
         const task = action.parentElement;
         task.classList.toggle('completed');
     }
+}
+
+function filterList(e) {
+    const todos = todoList.childNodes;
+    todos.forEach(todo => {
+        switch (e.target.value) {
+            case "all":
+                todo.style.display = 'flex';
+                break;
+            case "completed":
+                if (todo.classList.contains('completed')) {
+                    todo.style.display = 'flex';
+                } else {
+                    todo.style.display = 'none';
+                }
+                break;
+            case "todo":
+                if (!todo.classList.contains('completed')) {
+                    todo.style.display = 'flex';
+                } else {
+                    todo.style.display = 'none';
+                }
+                break;
+            default:
+                todo.style.display = 'flex';
+        }
+    })
 }
