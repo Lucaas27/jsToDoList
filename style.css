@@ -1,4 +1,6 @@
-* {
+*,
+*::before,
+*::after {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
@@ -43,4 +45,50 @@ form button {
 form button:hover {
 	color: #fff;
 	background: #f49176;
+}
+
+.todo-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.todo-list {
+	min-width: 35%;
+	list-style: none;
+}
+
+.todo-task-container {
+	background-color: #fff;
+	color: #000;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0.5rem;
+	font-size: 1.5rem;
+}
+
+.todo-task {
+	flex: 1;
+	padding: 0rem 0.5rem;
+}
+
+.todo-check,
+.todo-del {
+	padding: 1rem;
+	background: #e68064;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+.todo-check {
+	background: #4eaf4e;
+}
+
+.fa-trash-can,
+.fa-check,
+.fa-solid,
+.fa-regular {
+	pointer-events: none;
 }
