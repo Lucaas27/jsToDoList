@@ -28,7 +28,8 @@ form {
 }
 
 form button,
-form input {
+form input,
+#todo-msg {
 	padding: 0.5rem;
 	border: none;
 	background: #fff;
@@ -66,6 +67,7 @@ form button:hover {
 	align-items: center;
 	margin: 0.5rem;
 	font-size: 1.5rem;
+	transition: all 0.3s ease;
 }
 
 .todo-task {
@@ -91,4 +93,14 @@ form button:hover {
 .fa-solid,
 .fa-regular {
 	pointer-events: none;
+}
+
+.completed {
+	text-decoration: line-through;
+	opacity: 0.5;
+}
+
+.delete {
+	transform: translateY(8rem) rotateZ(20deg);
+	opacity: 0;
 }

@@ -2,6 +2,7 @@
 const todoBtn = document.querySelector('.todo-button');
 const todoInput = document.querySelector('.todo-input');
 const todoList = document.querySelector('.todo-list');
+const msg = document.getElementById("todo-msg");
 
 //Event Listeners
 todoBtn.addEventListener('click', addTodo);
@@ -45,5 +46,14 @@ function addTodo(e) {
 
 function changeState(e) {
     const action = e.target;
-    // console.log(action)
+    console.log(action)
+    if (action.classList[0] === 'todo-del') {
+        const task = action.parentElement;
+        task.classList.add('delete')
+        task.addEventListener('transitionend', () => task.remove())
+    }
+    else if (action.classList[0] === 'todo-check') {
+        const task = action.parentElement;
+        task.classList.toggle('completed');
+    }
 }
