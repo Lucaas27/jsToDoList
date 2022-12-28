@@ -1,65 +1,113 @@
-// Selectors
+
+/*************************Selectors*********************/
 const todoBtn = document.querySelector('.todo-button');
 const todoInput = document.querySelector('.todo-input');
 const todoList = document.querySelector('.todo-list');
-const msg = document.getElementById("todo-msg");
 const todoFilter = document.querySelector('.todo-filter');
+let tasks;
 
-//Event Listeners
+
+/*************************Event Listeners******************/
+document.addEventListener('DOMContentLoaded', displayList)
 todoBtn.addEventListener('click', addTodo);
 todoList.addEventListener('click', changeState);
 todoFilter.addEventListener('click', filterList);
 
 
-//Functions
+
+/*************************Functions************************/
+
+//Get tasks from the local storage
+function getFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('tasks')) || [];
+}
+
+//add tasks to the local storage
 function addTodo(e) {
     //Prevent form from reloading
-    try {
-        e.preventDefault();
+    e.preventDefault();
+    // save input to local storage
+    saveToLocalStorage(todoInput.value);
+    //clear input value
+    todoInput.value = '';
 
-    } catch (error) {
-        console.error(error)
-        alert('An error occurred and I need to write some code to handle this!');
-    }
+}
+
+//Save tasks to the local storage
+function saveToLocalStorage(singleTask) {
+    tasks = getFromLocalStorage();
+    const newTasks = [...tasks, singleTask];
+    localStorage.setItem('tasks', JSON.stringify(newTasks));
+    displayTask(singleTask);
+}
+
+
+//Displays task in the page
+function displayTask(task) {
     //Container for todo-task
     const taskContainer = document.createElement('article');
     taskContainer.classList.add('todo-task-container');
     //Individual tasks
     const newTask = document.createElement('li');
     newTask.classList.add('todo-task');
-    newTask.innerText = todoInput.value;
+    newTask.innerText = task;
     taskContainer.appendChild(newTask);
     // Check Button
     const checkBtn = document.createElement('button');
     checkBtn.classList.add('todo-check');
     checkBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
     taskContainer.appendChild(checkBtn);
+    //Edit button
+    const editBtn = document.createElement('button');
+    editBtn.classList.add('todo-edit');
+    editBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
+    taskContainer.appendChild(editBtn);
     //Delete button
     const delBtn = document.createElement('button');
     delBtn.classList.add('todo-del');
     delBtn.innerHTML = '<i class="fa-regular fa-trash-can"></i>';
     taskContainer.appendChild(delBtn);
-
-    // Append articles to list
+    // Append articles(tasks) to list
     todoList.appendChild(taskContainer);
-    //clear input value
-    todoInput.value = '';
 }
 
+//Fetch ALL tasks from the local storage
+function displayList(tasks) {
+    tasks = getFromLocalStorage();
+    tasks.forEach(task => {
+        displayTask(task)
+    })
+}
+
+
+//Delete Tasks, edit or mark as completed
 function changeState(e) {
     const action = e.target;
-    console.log(action)
+    const taskText = action.parentElement.firstChild.innerText;
+
     if (action.classList[0] === 'todo-del') {
         const task = action.parentElement;
-        task.classList.add('delete')
-        task.addEventListener('transitionend', () => task.remove())
+        task.classList.add('delete');
+        //remove from the page
+        task.addEventListener('transitionend', () => task.remove());
+        //get list of tasks
+        tasks = getFromLocalStorage();
+        // filter local storage array and remove the item from local storage
+        let newList = tasks.filter((value) => value !== taskText);
+        // set a new list in local storage without removed item
+        localStorage.setItem('tasks', JSON.stringify(newList));
+
     }
     else if (action.classList[0] === 'todo-check') {
         const task = action.parentElement;
         task.classList.toggle('completed');
     }
+    else if (action.classList[0] === 'todo-edit') {
+        todoInput.value = taskText;
+    }
 }
 
+// Filter tasks based on the value in the select element
 function filterList(e) {
     const todos = todoList.childNodes;
     todos.forEach(todo => {

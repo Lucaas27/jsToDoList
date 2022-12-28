@@ -28,8 +28,7 @@ form {
 }
 
 form button,
-form input,
-#todo-msg {
+form input {
 	padding: 0.5rem;
 	border: none;
 	background: #fff;
@@ -76,12 +75,17 @@ form button:hover {
 }
 
 .todo-check,
-.todo-del {
+.todo-del,
+.todo-edit {
 	padding: 1rem;
 	background: #e68064;
 	color: #fff;
 	border: none;
 	cursor: pointer;
+}
+
+.todo-edit {
+	background: #e0b731;
 }
 
 .todo-check {
