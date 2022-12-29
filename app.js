@@ -80,30 +80,110 @@ function displayList(tasks) {
 }
 
 
+
 //Delete Tasks, edit or mark as completed
 function changeState(e) {
     const action = e.target;
-    const taskText = action.parentElement.firstChild.innerText;
+    const task = action.parentElement;
 
     if (action.classList[0] === 'todo-del') {
-        const task = action.parentElement;
-        task.classList.add('delete');
-        //remove from the page
-        task.addEventListener('transitionend', () => task.remove());
-        //get list of tasks
-        tasks = getFromLocalStorage();
-        // filter local storage array and remove the item from local storage
-        let newList = tasks.filter((value) => value !== taskText);
-        // set a new list in local storage without removed item
-        localStorage.setItem('tasks', JSON.stringify(newList));
-
+        //create a modal with two buttons and attach event listeners to it
+        const modal = document.createElement('dialog');
+        const btns = document.createElement('div');
+        btns.classList.add('modal-btns');
+        const modalEditBtn = document.createElement('button');
+        modalEditBtn.classList.add('modal-del-btn');
+        modalEditBtn.textContent = 'Delete';
+        const modalCancelBtn = document.createElement('button');
+        modalCancelBtn.classList.add('modal-cancel-btn');
+        modalCancelBtn.textContent = 'Cancel';
+        const text = document.createTextNode('Are you sure you want to delete this task?')
+        btns.append(modalEditBtn, modalCancelBtn)
+        modal.append(text, btns);
+        todoList.append(modal);
+        modal.showModal();
+        // Allow modal to be removed if clicked outside main window
+        modal.addEventListener("click", event => {
+            const rect = modal.getBoundingClientRect();
+            if (event.clientY < rect.top || event.clientY > rect.bottom ||
+                event.clientX < rect.left || event.clientX > rect.right) {
+                modal.remove();
+            }
+        });
+        btns.addEventListener('click', (e) => {
+            if (e.target.classList[0] === 'modal-del-btn') {
+                modal.remove();
+                const taskText = action.parentElement.firstChild.innerText;
+                task.classList.add('delete');
+                //remove from the page
+                task.addEventListener('transitionend', () => task.remove());
+                //get list of tasks
+                tasks = getFromLocalStorage();
+                // filter local storage array and remove the item from local storage
+                let newList = tasks.filter((value) => value !== taskText);
+                // set a new list in local storage without removed item
+                localStorage.setItem('tasks', JSON.stringify(newList));
+            }
+            else if (e.target.classList[0] === 'modal-cancel-btn') { modal.remove() }
+        });
     }
     else if (action.classList[0] === 'todo-check') {
         const task = action.parentElement;
         task.classList.toggle('completed');
     }
     else if (action.classList[0] === 'todo-edit') {
-        todoInput.value = taskText;
+        //create a modal with two buttons and attach event listeners to it
+        const modal = document.createElement('dialog');
+        const taskText = action.parentElement.firstChild.innerText;
+        const btns = document.createElement('div');
+        btns.classList.add('modal-btns');
+        const modalEditBtn = document.createElement('button');
+        modalEditBtn.classList.add('modal-edit-btn');
+        modalEditBtn.textContent = 'Confirm';
+        const modalCancelBtn = document.createElement('button');
+        modalCancelBtn.classList.add('modal-cancel-btn');
+        modalCancelBtn.textContent = 'Cancel';
+        const text = document.createTextNode('Edit Task');
+        const input = document.createElement('div');
+        input.innerHTML = '<input type="text" name="edit-task" class="modal-edit-input">'
+        btns.append(modalEditBtn, modalCancelBtn)
+        modal.append(text, input, btns);
+        todoList.append(modal);
+        modal.showModal();
+        const modalEditInput = document.querySelector('.modal-edit-input');
+        modalEditInput.value = taskText;
+        // Allow modal to be removed if clicked outside main window
+        modal.addEventListener("click", event => {
+            const rect = modal.getBoundingClientRect();
+            if (event.clientY < rect.top || event.clientY > rect.bottom ||
+                event.clientX < rect.left || event.clientX > rect.right) {
+                modal.remove();
+            }
+        });
+        btns.addEventListener('click', (e) => {
+            if (e.target.classList[0] === 'modal-edit-btn') {
+                const todoTask = document.querySelectorAll('.todo-task');
+                tasks = getFromLocalStorage();
+                //edit the task
+                tasks[tasks.indexOf(taskText)] = modalEditInput.value;
+                //send new list to local storage
+
+                //display edited tasks in the page
+                todoTask.forEach((task, frontEndIndex) => { //loop through elements in the todo-container
+                    tasks.forEach((localStorageTask, BackEndIndex) => { //loop through values in the local storage
+                        if (frontEndIndex === BackEndIndex) {
+                            // if the indexes match for the records then update the front end to match the values in the local storage
+                            task.innerText = localStorageTask;
+                        }
+
+                    })
+                });
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                //remove modal from the page
+                modal.remove();
+            }
+            else if (e.target.classList[0] === 'modal-cancel-btn') { modal.remove() }
+        });
     }
 }
 

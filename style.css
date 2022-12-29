@@ -74,14 +74,53 @@ form button:hover {
 	padding: 0rem 0.5rem;
 }
 
+dialog {
+	border: none;
+	box-shadow: #00000029 2px 2px 5px 0px;
+	border-radius: 10px;
+	padding: 3rem;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	width: 40%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+}
+
+dialog::backdrop {
+	background-color: rgba(0, 0, 0, 0.544);
+}
+
+.modal-btns {
+	display: flex;
+	gap: 1rem;
+}
+
 .todo-check,
 .todo-del,
-.todo-edit {
+.todo-edit,
+.modal-del-btn,
+.modal-cancel-btn,
+.modal-edit-btn {
 	padding: 1rem;
 	background: #e68064;
 	color: #fff;
 	border: none;
 	cursor: pointer;
+}
+
+.modal-cancel-btn {
+	background: #e0b731;
+}
+
+.modal-del-btn {
+	color: #fff;
 }
 
 .todo-edit {
