@@ -1,6 +1,4 @@
-# Project Title
-
-Javascript Todo List.
+# Javascript Todo List
 
 ## Description
 
